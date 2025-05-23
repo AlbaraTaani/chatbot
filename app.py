@@ -93,17 +93,42 @@ set_of_names = {
     'dr.', 'prof.', 'ms.', 'mr.', 'cs', 'da', 'cis', 'bit', 'cys','dr', 'prof', 'ms', 'mr',
 }
 
-# Create data directory if it doesn't exist
-if not os.path.exists('data'):
-    os.makedirs('data')
+# # Create data directory if it doesn't exist
+# if not os.path.exists('data'):
+#     os.makedirs('data')
 
-# Path to log unknown queries
-# unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
-unknown_log_path = '/data/unknown_predictions_log.csv'
-if not os.path.exists(unknown_log_path):
-    with open(unknown_log_path, 'w', newline='', encoding='utf-8') as f:
+# # Path to log unknown queries
+# # unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
+# unknown_log_path = '/data/unknown_predictions_log.csv'
+# if not os.path.exists(unknown_log_path):
+#     with open(unknown_log_path, 'w', newline='', encoding='utf-8') as f:
+#         writer = csv.writer(f)
+#         writer.writerow(['Date', 'Original Query', 'Processed Query'])
+
+
+# ── Determine where to store logs ────────────────────────────────────────────
+BASE_DIR = Path(__file__).parent
+
+# If Render mounted a persistent disk at /data, use it.
+# Otherwise fall back to your local `Unknown/` folder.
+if Path('/data').is_dir():
+    DATA_DIR = Path('/data')
+else:
+    DATA_DIR = BASE_DIR / 'Unknown'
+
+# Ensure the directory exists
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+# Path to the unknown-predictions log
+unknown_log_path = DATA_DIR / 'unknown_predictions_log.csv'
+
+# If the CSV doesn't yet exist, create it with headers
+if not unknown_log_path.exists():
+    with unknown_log_path.open('w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['Date', 'Original Query', 'Processed Query'])
+# ─────────────────────────────────────────────────────────────────────────────
+
 
 # API Key for OpenRouter
 api_key = "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"
