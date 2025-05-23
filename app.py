@@ -131,7 +131,7 @@ if not unknown_log_path.exists():
 
 
 # API Key for OpenRouter
-api_key = "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"
+api_key = "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"
 
 class NameMatcher:
     def __init__(self, names_list):
