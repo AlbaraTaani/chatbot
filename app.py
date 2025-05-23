@@ -98,7 +98,8 @@ if not os.path.exists('data'):
     os.makedirs('data')
 
 # Path to log unknown queries
-unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
+# unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
+unknown_log_path = '/data/unknown_predictions_log.csv'
 if not os.path.exists(unknown_log_path):
     with open(unknown_log_path, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
