@@ -93,42 +93,16 @@ set_of_names = {
     'dr.', 'prof.', 'ms.', 'mr.', 'cs', 'da', 'cis', 'bit', 'cys','dr', 'prof', 'ms', 'mr',
 }
 
-# # Create data directory if it doesn't exist
-# if not os.path.exists('data'):
-#     os.makedirs('data')
+# Create data directory if it doesn't exist
+if not os.path.exists('data'):
+    os.makedirs('data')
 
-# # Path to log unknown queries
-# # unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
-# unknown_log_path = '/data/unknown_predictions_log.csv'
-# if not os.path.exists(unknown_log_path):
-#     with open(unknown_log_path, 'w', newline='', encoding='utf-8') as f:
-#         writer = csv.writer(f)
-#         writer.writerow(['Date', 'Original Query', 'Processed Query'])
-
-
-# ── Determine where to store logs ────────────────────────────────────────────
-BASE_DIR = Path(__file__).parent
-
-# If Render mounted a persistent disk at /data, use it.
-# Otherwise fall back to your local `Unknown/` folder.
-if Path('/data').is_dir():
-    DATA_DIR = Path('/data')
-else:
-    DATA_DIR = BASE_DIR / 'Unknown'
-
-# Ensure the directory exists
-DATA_DIR.mkdir(parents=True, exist_ok=True)
-
-# Path to the unknown-predictions log
-unknown_log_path = DATA_DIR / 'unknown_predictions_log.csv'
-
-# If the CSV doesn't yet exist, create it with headers
-if not unknown_log_path.exists():
-    with unknown_log_path.open('w', encoding='utf-8', newline='') as f:
+# Path to log unknown queries
+unknown_log_path = os.path.join('data', 'unknown_predictions_log.csv')
+if not os.path.exists(unknown_log_path):
+    with open(unknown_log_path, 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f)
         writer.writerow(['Date', 'Original Query', 'Processed Query'])
-# ─────────────────────────────────────────────────────────────────────────────
-
 
 # API Key for OpenRouter
 api_key = "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"
@@ -471,17 +445,11 @@ def initialize_components():
             'vectorizer': model_dir / 'tfidf_vectorizer.pkl'
         }
         
-        # Debug: print out where we’re looking
-        print("🔎 Looking for data files in:", data_dir)
-        print("🔎 Looking for model files in:", model_dir)
-        
         missing_files = []
         for name, path in required_files.items():
             if not path.exists():
                 missing_files.append(str(path))
-        if missing_files:
-            print("🚨 Missing files:", missing_files)
-
+        
         try:
             df_FAQs = pd.read_csv(required_files['FAQs'])
             df_responses = pd.read_csv(required_files['responses'])
