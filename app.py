@@ -471,11 +471,17 @@ def initialize_components():
             'vectorizer': model_dir / 'tfidf_vectorizer.pkl'
         }
         
+        # Debug: print out where we’re looking
+        print("🔎 Looking for data files in:", data_dir)
+        print("🔎 Looking for model files in:", model_dir)
+        
         missing_files = []
         for name, path in required_files.items():
             if not path.exists():
                 missing_files.append(str(path))
-        
+        if missing_files:
+            print("🚨 Missing files:", missing_files)
+
         try:
             df_FAQs = pd.read_csv(required_files['FAQs'])
             df_responses = pd.read_csv(required_files['responses'])
